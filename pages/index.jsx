@@ -13,8 +13,9 @@ import {
   Text,
   Wrap,
   WrapItem,
-  Center,
   useMediaQuery,
+  HStack,
+  StackDivider,
 } from "@chakra-ui/react";
 import {
   AddIcon,
@@ -31,7 +32,9 @@ import LoremTwo from "./loremlogo/loremTwo";
 import LoremThree from "./loremlogo/loremThree";
 import LoremFour from "./loremlogo/loremFour";
 import LoremFive from "./loremlogo/loremFive";
-import styles from "../styles/Home.module.css";
+import styles from "../styles/Home.module.scss";
+import React, { useState } from "react";
+import Head from "next/head";
 
 const Home = () => {
   const property = {
@@ -47,44 +50,19 @@ const Home = () => {
 
   const [isLargerThan930] = useMediaQuery("(min-width: 930px)");
   const [isLargerThan450] = useMediaQuery("(min-width: 450px)");
+  const [open, setOpen] = useState(false);
 
   return (
     <Flex flexDirection="column">
-      <Flex bg="red.500" w="100%" p={4}>
-        <Flex>
-          <Heading as="h3" size="lg" mt={1} ml={1} color="white">
-            Asobo
-          </Heading>
-        </Flex>
-        <Spacer />
-        <Menu>
-          <MenuButton
-            as={IconButton}
-            icon={<HamburgerIcon />}
-            aria-label="Options"
-            color="white"
-            colorScheme="red"
-            variant="outline"
-          />
-          <MenuList>
-            <MenuItem icon={<AddIcon />} command="⌘T">
-              About
-            </MenuItem>
-            <MenuItem icon={<ExternalLinkIcon />} command="⌘N">
-              Services
-            </MenuItem>
-            <MenuItem icon={<RepeatIcon />} command="⌘⇧N">
-              Projects
-            </MenuItem>
-            <MenuItem icon={<EditIcon />} command="⌘O">
-              Blog
-            </MenuItem>
-            <MenuItem icon={<EditIcon />} command="⌘O">
-              Book a call
-            </MenuItem>
-          </MenuList>
-        </Menu>
-      </Flex>
+      <Head>
+        <title>Asobo | Let's PLAY!</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      {isLargerThan930 ? (
+        <NavBar open={open} setOpen={setOpen}></NavBar>
+      ) : (
+        <NavBar open={open} setOpen={setOpen}></NavBar>
+      )}
 
       <Flex
         flexDirection={{
@@ -92,12 +70,11 @@ const Home = () => {
           md: "column-reverse",
           lg: "row",
         }}
-        m={4}
         alignItems="center"
         justify="center"
         maxW="100%"
         m={{ base: "6", md: "6", lg: "6" }}
-        mt={{ base: "12", md: "12", lg: "12" }}
+        mt={{ base: "24", md: "32", lg: "32" }}
         mb={{ base: "12", md: "12", lg: "12" }}
       >
         <Box
@@ -114,18 +91,21 @@ const Home = () => {
               lineHeight={{ base: "1.3", md: "1.4", lg: "1.4" }}
               fontSize={{ base: "32px", md: "40px", lg: "52px" }}
             >
-              I design products
+              Let's PLAY,
             </Heading>
             <Heading
               fontSize={{ base: "32px", md: "40px", lg: "52px" }}
               lineHeight={{ base: "1.3", md: "1.4", lg: "1.4" }}
+              bgGradient="linear(to-l, #7928CA,#FF0080)"
+              bgClip="text"
+              fontWeight="extrabold"
             >
-              that delight and inspire people.
+              DELIGHT and INSPIRE people!
             </Heading>
           </Box>
           <Text fontSize="xl" mt={5}>
-            Hi! I'm Joe, a product designer, I create user-friendly interfaces
-            for fast-growing startups.
+            Hi! I'm Asobo, a playful website designer, I create user-friendly
+            interfaces for fast-growing startups.
           </Text>
           <Button size="lg" colorScheme="red" mt="24px" bg="red.500">
             Book a Call
@@ -134,7 +114,7 @@ const Home = () => {
         {isLargerThan450 ? <BrandLogo /> : ""}
       </Flex>
 
-      <Flex flexDirection="column" alignItems="center" mt={6}>
+      <Flex flexDirection="column" alignItems="center" mt={12}>
         <Text fontSize={{ base: "24px" }}>
           {isLargerThan930 ? "Trusted by" : "Lorem by"}
         </Text>
@@ -159,7 +139,7 @@ const Home = () => {
         </Box>
       </Flex>
 
-      <Flex flexDirection="column" alignItems="center" mt={6}>
+      <Flex flexDirection="column" alignItems="center" mt={12}>
         <Text
           mb={6}
           bgGradient="linear(to-l, #7928CA,#FF0080)"
@@ -369,7 +349,83 @@ const Home = () => {
           </Box>
         </Box>
       </Flex>
+      <Flex
+        background="#3f3d56"
+        color="white"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        h="100px"
+      >
+        <Flex
+          w="16rem"
+          display="flex"
+          justifyContent="space-evenly"
+          className={styles.aLinks}
+        >
+          <a href="https://www.linkedin.com/">LinkedIn</a>
+          <a href="https://www.twitter.com/">Twitter</a>
+          <a href="https://www.facebook.com/">Facebook</a>
+        </Flex>
+        <Flex>
+          <span>2021 Earl Pascual @ earlstefan.github.io</span>
+        </Flex>
+      </Flex>
     </Flex>
+  );
+};
+
+const NavBar = (props) => {
+  console.log(props);
+
+  const openStyle = () => {
+    return styles.navLinks + " " + styles.open;
+  };
+
+  const openToggle = () => {
+    props.setOpen(!props.open);
+  };
+  return (
+    <>
+      <Flex zIndex="docked" position="fixed" w="100%" pt={4} background="white">
+        <Heading
+          as="h3"
+          size="lg"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          ml={7}
+          color="#3f3d56"
+        >
+          Asobo
+        </Heading>
+        <Spacer />
+        <div
+          className={styles.hamburger}
+          onClick={() => {
+            openToggle();
+          }}
+        >
+          <div className={styles.line}></div>
+          <div className={styles.line}></div>
+          <div className={styles.line}></div>
+        </div>
+        <ul className={props.open ? openStyle() : styles.navLinks}>
+          <li>
+            <a href="#">About</a>
+          </li>
+          <li>
+            <a href="#">Services</a>
+          </li>
+          <li>
+            <a href="#">Blog</a>
+          </li>
+          <li>
+            <a href="#">Book a Call</a>
+          </li>
+        </ul>
+      </Flex>
+    </>
   );
 };
 
